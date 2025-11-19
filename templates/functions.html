@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+	<title>関数一覧 - Programing Naming App</title>
+</head>
+<body>
+	<main class="container">
+		<nav>
+			<ul>
+				<li><strong>Programing Naming App</strong></li>
+			</ul>
+			<ul>
+				<li><a href="/">ホームに戻る</a></li>
+			</ul>
+		</nav>
+		<h1>関数一覧</h1>
+		{{ range . }}
+			<article>
+				<header><strong>問題 #{{ .ID }}</strong></header>
+				<p>{{ .Description }}</p>
+				<footer>
+					<a href="/function/{{ .ID }}" role="button">この問題に挑戦する</a>
+				</footer>
+			</article>
+		{{ end }}
+	</main>
+</body>
+</html>

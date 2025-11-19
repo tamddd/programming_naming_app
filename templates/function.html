@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    <link rel="stylesheet" href="main.css">
+	<title>問題 - Programing Naming App</title>
+</head>
+<body>
+	<main class="container">
+		<nav>
+			<ul>
+				<li><strong>Programing Naming App</strong></li>
+			</ul>
+			<ul>
+				<li><a href="/">ホームに戻る</a></li>
+			</ul>
+		</nav>
+		<article id="question-container">
+			<header><strong>問題 #{{ .ID }}</strong></header>
+            <p>{{ .Description }}</p>
+			<pre><code>{{ .Code }}</code></pre>
+			<footer>
+				<fieldset id="options-fieldset">
+					<legend>関数名を選択</legend>
+					{{ range .Options }}
+					<label>
+						<input type="radio" name="function_name" value="{{ .Value }}">
+						{{ .Text }}
+					</label>
+					{{ end }}
+				</fieldset>
+				<button id="evaluate-button" type="submit">評価する</button>
+				<div id="result-area" class="result-container"></div>
+			</footer>
+		</article>
+	</main>
+</body>
+</html>
+
+<style>
+	.result-container {
+		margin-top: 1rem;
+	}
+	.result-container article {
+		animation: fadeIn 0.5s ease-in-out;
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+<script>
+    const correctAnswer = "{{ .Answer }}";
+	document.querySelector('input[name="function_name"]').checked = true;
+	document.getElementById('evaluate-button').onclick = evaluateFunction;
+
+    function evaluateFunction() {
+        const selectedValue = document.querySelector('input[name="function_name"]:checked').value;
+        const resultArea = document.getElementById('result-area');
+        
+        let resultHtml = '';
+        if (selectedValue === correctAnswer) {
+            resultHtml = `<article><header>🎉 正解！</header><p><code>${selectedValue}</code> はこの関数の役割を的確に表しています。素晴らしい命名です！</p></article>`;
+        } else {
+            resultHtml = `<article><header>🤔 うーん、惜しい！</header><p><code>${selectedValue}</code> は最適とは言えません。もう一度考えてみましょう！</p></article>`;
+        }
+        resultArea.innerHTML = resultHtml;
+    }
+</script>

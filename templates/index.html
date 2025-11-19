@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+	<title>Programing Naming App</title>
+</head>
+<body>
+	<main class="container">
+		<h1>Programing Naming App</h1>
+		<p>
+			関数に、いい感じの名前をつけて、評価するアプリです。
+		</p>
+		<article>
+			<header><strong>サンプル問題</strong></header>
+            <p>???の部分に、妥当な関数名を選んでください。</p>
+<pre><code>function ???(a, b) {
+  return a + b;
+}
+</code></pre>
+			<footer>
+				<fieldset>
+					<legend>関数名を選択</legend>
+					<label for="add">
+						<input type="radio" id="add" name="function_name" value="add" checked>
+						add
+					</label>
+					<label for="func">
+						<input type="radio" id="func" name="function_name" value="func">
+						func
+					</label>
+					<label for="doSomething">
+						<input type="radio" id="doSomething" name="function_name" value="doSomething">
+						doSomething
+					</label>
+				</fieldset>
+				<button type="submit" onclick="evaluateFunction()">評価する</button>
+				<div id="result-area" class="result-container"></div>
+			</footer>
+		</article>
+        
+        <a href="/functions" role="button">関数一覧</a>
+	</main>
+</body>
+</html>
+<style>
+	.result-container {
+		margin-top: 1rem;
+	}
+	.result-container article {
+		animation: fadeIn 0.5s ease-in-out;
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+<script>
+    function evaluateFunction() {
+        const functionName = document.querySelector('input[name="function_name"]:checked').value;
+        const resultArea = document.getElementById('result-area');
+        let resultHtml = '';
+
+        if (functionName === 'add') {
+            resultHtml = `
+                <article>
+                    <header>🎉 正解！</header>
+                    <p><code>add</code> は「加える」という意味で、2つの数値を足すこの関数の役割を的確に表しています。素晴らしい命名です！</p>
+                </article>
+            `;
+        } else if (functionName === 'func') {
+            resultHtml = `
+                <article>
+                    <header>🤔 うーん、惜しい！</header>
+                    <p><code>func</code> は Function（関数）の略ですが、これでは何をする関数なのか全く分かりません。より具体的で、処理内容が推測できる名前をつけましょう。</p>
+                </article>
+            `;
+        } else if (functionName === 'doSomething') {
+            resultHtml = `
+                <article>
+                    <header>🤔 うーん、惜しい！</header>
+                    <p><code>doSomething</code>（何かをする）という名前は、プログラミングにおいて最も避けるべき命名の一つです。これでは関数が何をするのか全く伝わりません。</p>
+                </article>
+            `;
+        }
+
+        resultArea.innerHTML = resultHtml;
+    }
+</script>
