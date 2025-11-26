@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: naming_app_mysql
+    platform: linux/amd64 # M1/M2 MacなどARM系CPUでの互換性のために追加
+    ports:
+      - "3306:3306" # PCの3306番ポートをコンテナの3306番ポートに繋ぐ
+    environment:
+      MYSQL_ROOT_PASSWORD: password # main.goのデフォルト値と合わせる
+      MYSQL_DATABASE: naming_app_db # main.goのデフォルト値と合わせる
+    volumes:
+      - mysql_data:/var/lib/mysql # データを永続化するための設定
+
+volumes:
+  mysql_data:

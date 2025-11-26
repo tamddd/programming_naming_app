@@ -1,5 +1,21 @@
-memo
-.env
+# Go build output
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binaries for programs and plugins
+bin/
+pkg/
+
+# OS-generated files
 .DS_Store
-.cursorrules
-.vscode
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Environment variables
+.env
+*.env

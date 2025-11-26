@@ -1,6 +1,7 @@
 package function
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -21,6 +22,14 @@ type Function struct {
 	Code        string   `json:"code"`
 	Options     []Option `json:"options"`
 	Answer      string   `json:"answer"`
+}
+
+type Service struct {
+	DB *sql.DB
+}
+
+func NewService(db *sql.DB) *Service {
+	return &Service{DB: db}
 }
 
 // problems はすべての問題を保持するマップ
@@ -49,7 +58,7 @@ var problems = map[string]Function{
 	},
 }
 
-func GetFunctionById(w http.ResponseWriter, r *http.Request) {
+func (s *Service) GetFunctionById(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("GetFunctionById")
 	id := mux.Vars(r)["id"]
 	function, err := getFunctionById(id)
@@ -87,7 +96,7 @@ func getAllFunctions() []Function {
 	return allProblems
 }
 
-func GetAllFunctions(w http.ResponseWriter, r *http.Request) {
+func (s *Service) GetAllFunctions(w http.ResponseWriter, r *http.Request) {
 	functions := getAllFunctions()
 	tmpl, err := template.ParseFiles("templates/functions.html")
 	if err != nil {
