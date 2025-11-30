@@ -5,6 +5,8 @@
 *.so
 *.dylib
 
+app
+
 # Binaries for programs and plugins
 bin/
 pkg/
@@ -19,3 +21,6 @@ pkg/
 # Environment variables
 .env
 *.env
+
+server.log
+
