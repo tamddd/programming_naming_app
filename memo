@@ -4,38 +4,13 @@
 入力はどうしようかな？自由入力？まずは、簡単に候補を表示してチェックボックス？
 か何かで、選択してもらおうか。
 
-簡易的な選択方式と、自分で入力するのどちらも作ろうか
-特定の関数ページの中で、自由入力も出来るようにしたいね
 
-じゃあ、routingを考えたい
-/home はとりあえず、どんなアプリかの説明
-/functions は関数のタイトル分野の一覧にする？
-/functions/:id は関数の詳細ページにする？
-/functions/:id/edit は関数の編集ページにする？
-/functions/:id/discription は関数の説明ページにする？
-
-
-あとは、データベースの設計を考えたい
-
-userテーブル
-id
-name
-email
-password
-created_at
-updated_at
-
-functionテーブル
-id
-title
-description
-created_at
-updated_at
-is_public
-user_id
-
-
-docker desktopを使って、mysqlを起動させたい
-idとか、そういうのをまとめたファイルも必要だね。
-
-package dbを作ろうね
+AI評価機能の実装案 (将来):
+1. ユーザーが入力した「関数名」と「問題のコード」を受け取る
+2. GoからGemini API (またはOpenAI API) を叩く
+   - プロンプト例:
+     "以下の関数コードに対して、ユーザーが考えた関数名 '{{user_input}}' を評価してください。
+      コード: {{code}}
+      評価基準: 命名規則、意図の明確さ、簡潔さ。
+      出力形式: JSON { 'score': 0-100, 'feedback': '良い点と改善点' }"
+3. 返ってきたJSONをパースして、フロントエンドに表示する

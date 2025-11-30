@@ -34,11 +34,17 @@ func createUserTable(db *sql.DB) error {
 }
 
 func createFunctionTable(db *sql.DB) error {
+	// 開発環境用: スキーマ変更のためにテーブルをドロップ
+	db.Exec("DROP TABLE IF EXISTS functions")
+
 	query := `
     CREATE TABLE IF NOT EXISTS functions (
         id BIGINT PRIMARY KEY AUTO_INCREMENT,
-        title VARCHAR(255) NOT NULL,
+        title VARCHAR(255),
         description TEXT,
+        code TEXT,
+        options JSON,
+        answer VARCHAR(255),
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         is_public BOOLEAN NOT NULL DEFAULT FALSE,

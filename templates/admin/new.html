@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新しい問題を作成 - Naming App</title>
+    <link rel="stylesheet" href="/main.css">
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 150px;
+            font-family: monospace;
+        }
+
+        .option-group {
+            border: 1px solid #eee;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>新しい問題を作成</h1>
+        <nav>
+            <a href="/functions">一覧に戻る</a>
+        </nav>
+    </header>
+
+    <main>
+        <form action="/functions" method="POST">
+            <div class="form-group">
+                <label for="title">タイトル</label>
+                <input type="text" id="title" name="title" required placeholder="例: 足し算関数">
+            </div>
+
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description" required placeholder="関数の説明を入力してください"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="code">コード (??? を含めてください)</label>
+                <textarea id="code" name="code" required>function ???(a, b) {
+  return a + b;
+}</textarea>
+            </div>
+
+            <h3>選択肢</h3>
+            <div class="option-group">
+                <div class="form-group">
+                    <label>選択肢 1</label>
+                    <input type="text" name="option1_value" placeholder="値 (例: add)" required>
+                    <input type="text" name="option1_text" placeholder="表示テキスト (例: add)" required>
+                </div>
+                <div class="form-group">
+                    <label>選択肢 2</label>
+                    <input type="text" name="option2_value" placeholder="値 (例: func)" required>
+                    <input type="text" name="option2_text" placeholder="表示テキスト (例: func)" required>
+                </div>
+                <div class="form-group">
+                    <label>選択肢 3</label>
+                    <input type="text" name="option3_value" placeholder="値 (例: doSomething)" required>
+                    <input type="text" name="option3_text" placeholder="表示テキスト (例: doSomething)" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="answer">正解の値</label>
+                <input type="text" id="answer" name="answer" required placeholder="例: add">
+            </div>
+
+            <button type="button" onclick="generateWithAI()" style="background-color: #28a745; margin-right: 10px;">🤖
+                AIで生成</button>
+            <button type="submit">作成する</button>
+        </form>
+    </main>
+
+    <script>
+        async function generateWithAI() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '生成中...';
+
+            try {
+                const response = await fetch('/admin/functions/generate', {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('AI generation failed');
+                }
+
+                const text = await response.text();
+                // Remove markdown code blocks if present
+                let jsonText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                const data = JSON.parse(jsonText);
+
+                // Populate form fields
+                document.getElementById('title').value = data.title || '';
+                document.getElementById('description').value = data.description || '';
+                document.getElementById('code').value = data.code || '';
+                document.getElementById('answer').value = data.answer || '';
+
+                // Populate options
+                if (data.options && data.options.length >= 3) {
+                    document.querySelector('input[name="option1_value"]').value = data.options[0].value || '';
+                    document.querySelector('input[name="option1_text"]').value = data.options[0].text || '';
+                    document.querySelector('input[name="option2_value"]').value = data.options[1].value || '';
+                    document.querySelector('input[name="option2_text"]').value = data.options[1].text || '';
+                    document.querySelector('input[name="option3_value"]').value = data.options[2].value || '';
+                    document.querySelector('input[name="option3_text"]').value = data.options[2].text || '';
+                }
+
+                alert('AIで問題を生成しました！内容を確認して「作成する」を押してください。');
+            } catch (error) {
+                alert('AI生成に失敗しました: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = '🤖 AIで生成';
+            }
+        }
+    </script>
+</body>
+
+</html>
